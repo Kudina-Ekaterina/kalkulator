@@ -1,84 +1,147 @@
 #include <stdio.h>
-char regul;
-int main(int argc, char *argv[])
-{
+#include <stdlib.h>
+int main(int argc, char *argv[]) {
     setvbuf(stdout, NULL, _IONBF, 0);
     setvbuf(stderr, NULL, _IONBF, 0);
-    char e;
-    do
-    {
-        // перечислим функции и обозначения функций
-        printf ("знак суммы +\n");
-        printf ("знак разности -\n");
-        printf ("знак умножения *\n");
-        printf ("знак деления /\n");
-        printf ("знак возведения в степень ^\n");
-        printf ("знак факториала !\n");
-        double a,b,d; // задаем переменные типа double
-        char c; // задаем переменную типа char
-        printf ("введите операцию "); // просим ввести знак нужной операции
-        scanf (" %c", &c); // вводим с
-        switch (c) //блок функций
-        {
-            case '+': // блок суммы
-            printf ("введите первое число a= ");
-            scanf (" %lg", &a);
-            printf ("введите второе число b= ");
-            scanf (" %lg", &b);
-            printf (" %lg plus %lg = %lg", a,b,a+b);
-            break;
-            case '-': // блок разности
-            printf ("введите первое число a= ");
-            scanf (" %lg", &a);
-            printf ("введите второе число b= ");
-            scanf (" %lg", &b);
-            printf (" %lg minus %lg = %lg", a,b,a-b);
-            break;
-            case '*': // блок умножения
-            printf ("введите первое число a= ");
-            scanf (" %lg", &a);
-            printf ("введите второе число b= ");
-            scanf (" %lg", &b);
-            printf (" %lg multiply by %lg = %lg", a,b,a*b);
-            break;
-            case '/': // блок деления
-            printf ("введите первое число a= ");
-            scanf (" %lg", &a);
-            printf ("введите второе число b= ");
-            scanf (" %lg", &b);
-            printf (" %lg divide by %lg = %lg", a,b,a/b);
-            break;
-            case '^': // блок возведения в степень
-            printf ("введите первое число a= ");
-            scanf (" %lg", &a);
-            printf ("введите второе число b= ");
-            scanf (" %lg", &b);
-            d=a; // приравниваем, чтобы посчитать степень
-            for (int i=1;i<b;i++)
-            {
-                d=d*a;
-            }
-            printf (" %lg в степени %lg = %lg", a,b,d);
-            break;
-            case '!': // блок факториала
-            printf ("введите число a= ");
-            scanf (" %lg", &a);
-            double h = 1;
-            double s;
-            s = a;
-            if (a > 0) for(h = 1; h < s; h++)
-            {
-                a = a * (s - h);
-            }
-            if (a == 0) printf("0! = 1");
-            else if (a < 0) printf("Факториал отрицательного числа не вычисляется");
-            else printf("\n%lf! = %lf",s,a);
-            break;
-            default: puts ("nop");
-        }
-    puts ("\nХотите продолжить? Введите y, если да, n, если нет");
-    scanf (" %c", &e);
+    char a = 'y', operation, regime; // объявляем переменные для хранения продолжения работы, операции, режима
+    double *x, *y, *result; // объявляем переменные для хранения входных данных и результата
+    unsigned long long res; // объявляем переменную для хранения результатов факториала и степени
+    int size; // переменная для хранения размера вектора
+    while(a == 'y') {
+    	// перечислим функции и обозначения функций
+    	printf("работа с векторами v\n");
+    	printf("работа с числами s\n");
+    	printf ("знак суммы двух чисел или векторов +\n");
+    	printf ("знак разности двух чисел или векторов -\n");
+    	printf ("знак умножения или скалярного произведения векторов*\n");
+    	printf ("знак деления /\n");
+    	printf ("знак возведения в степень ^\n");
+    	printf ("знак факториала !\n");
+    	printf("выберете режим, введите v - для работы с веторами или s - для работы с числами\n"); // просим пользователя выбрать режим работы
+    	scanf(" %c", &regime);
+    	printf("введите знак операции\n"); // просим пользователя ввести знак операции
+    	scanf(" %c", &operation);
+    	switch(regime) {
+    		case 'v': // обработка векторных операций
+    			printf("введите размерность вектора\n"); // просим пользователя ввести размерность вектора
+    			scanf("%i", &size);
+    			x = malloc(size * sizeof(double)); // выделяем память для хранения входных векторов
+    			y = malloc(size * sizeof(double));
+    			if (operation == '+' || operation == '-') {
+    				result = malloc(size * sizeof(double)); // выделяем память для хранения результата операции
+    			}
+    			else {
+    				result = malloc(sizeof(double));
+    				*result = 0;
+    			}
+    			printf("введите координаты первого вектора\n"); // просим пользователя ввести координаты первого вектора
+    			for (int i = 0; i < size; i++) scanf("%lf", &x[i]); // считываем первый вектор
+    			printf("введите координаты второго вектора\n"); // просим пользователя ввести координаты второго вектора
+    			for (int i = 0; i < size; i++) scanf("%lf", &y[i]); // считываем второй вектор
+    			switch(operation) {
+    				case '+':
+    					for (int i = 0; i < size; i++) result[i] = x[i] + y[i]; // вычисляем сумму векторов
+    					break;
+    				case '-':
+    					for (int i = 0; i < size; i++) result[i] = x[i] - y[i]; // вычисляем разность векторов
+    					break;
+    				case '*':
+    					for (int i = 0; i < size; i++) *result += x[i] * y[i]; // вычисляем скалярное произведение векторво
+    					break;
+    			}
+    			printf("( ");
+    			for (int i = 0; i < size; i++) {
+    				if (i == size - 1) {
+    					printf("%lf", x[i]);
+    				}
+    				else printf("%lf ", x[i]);
+    			}
+    			printf(" ) %c ( ", operation);
+    			for (int i = 0; i < size; i++) {
+    				if (i == size - 1) {
+    					printf("%lf", y[i]);
+    				}
+    				else printf("%lf ", y[i]);
+    			}
+    			if (operation == '*') {
+    				printf(" ) = %lf\n", *result);
+    			}
+    			else {
+    				printf(" ) = ( ");
+    				for (int i = 0; i < size; i++){
+    					if (i == size - 1){
+    				    	printf("%lf", result[i]);
+    				    }
+    				    else printf("%lf ", result[i]);
+    				}
+    				printf(" )\n");
+    			}
+    			free(x);
+    			free(y);
+    			free(result);
+    			break;
+    		case 's':
+    			res = 1;
+    			x = malloc(sizeof(double));
+    			y = malloc(sizeof(double));
+    			if (operation == '!') {
+    				printf("введите число для нахождения факториала\n");
+    				scanf("%lf", x);
+    			}
+    			else {
+    				printf("введите первое число\n"); // просим пользователя ввести первое число
+    				scanf("%lf", x); // записываем первое число в переменную
+    				printf("введите второе число\n"); // просим пользователя ввести второе число
+    				scanf("%lf", y); // записываем второе число в переменную
+    			}
+       			switch(operation) {
+    				case '+':
+    					printf("%lf %c %lf = %lf\n", *x, operation, *y, *x + *y);
+    					break;
+    				case '-':
+    					printf("%lf %c %lf = %lf\n", *x, operation, *y, *x - *y);
+    					break;
+    				case '/':
+    					printf("%lf %c %lf = %lf\n", *x, operation, *y, *x / *y);
+    					break;
+    				case '*':
+    					printf("%lf %c %lf = %lf\n", *x, operation, *y, *x * *y);
+    					break;
+    				case '!':
+    					res = *x;
+    					if (*x > 0) {
+    						for (int i = res - 1; i > 0; i--) {
+    							res *= i;
+    						}
+    						printf("%lf! = %llu\n", *x, res);
+    					}
+    					else printf("факториала отрицательного числа не существует\n");
+    					break;
+    				case '^':
+    					result = malloc(sizeof(double));
+    					*result = 1;
+    					if (*y < 0) {
+    						for (int i = 1; i <= -(*y); i++) {
+    							*result *= *x;
+    						}
+    						*result = (1/(*result));
+    					}
+    					else {
+    						for (int i = 1; i <= *y; i++) {
+    					   		*result *= *x;
+    					   	}
+    					}
+    					printf("%lf ^ %lf = %lf\n", *x, *y, *result);
+    					free(result);
+    					break;
+
+    			}
+       			free(x);
+       			free(y);
+       			break;
+    	}
+    	printf("хотите продолжить? Введите y, если да, n, если нет\n");
+    	scanf(" %c", &a);
     }
-while (e!='n');
-return 0;
+    return 0;
 }
